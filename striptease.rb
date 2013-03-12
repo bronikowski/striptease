@@ -22,7 +22,8 @@ DataMapper.finalize
 
 get '/' do
   @strip = Strip.last
-  erb :index, :locals => { :strip => @strip }
+  @prev = Strip.get(:id.lt => @strip.id, :limit => 1 )
+  erb :index, :locals => { :strip => @strip, :prev => @prev }
 end
 
 get '/archive' do
@@ -32,7 +33,9 @@ end
 
 get '/:id' do
   @strip = Strip.get(params[:id])
-  erb :strip, :locals => { :strip => @strip }
+  @prev = Strip.get(:id.lt => @strip.id, :limit => 1 )
+  @next = Strip.get(:id.gt => @strip.id, :limit => 1 )
+  erb :strip, :locals => { :strip => @strip, :next => @next, :prev => @prev }
 end
 
 
